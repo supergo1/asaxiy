@@ -28,14 +28,15 @@ def user_create(request):
     phone = request.data.get('phone')
     username = request.data.get('username')
     password = request.data.get('password')
-    usercreate = User.objects.create_user(
+    user = User.objects.create_user(
         first_name=first_name,
         last_name=last_name,
-        age=age,
         phone=phone,
         username=username,
         password=password
     )
-    return Response(serializer, status=200)
+    token = Token.objects.get_or_create(user=user)
+    print(request)
+    return Response({'ok': True, 'token': token[0].key}, status=200)
 
 
