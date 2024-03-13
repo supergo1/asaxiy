@@ -19,6 +19,9 @@ class Author(models.Model):
     bio = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Book(models.Model):
     title = models.CharField(max_length=255)
