@@ -10,20 +10,6 @@ from .models import *
 
 
 @api_view(['POST'])
-def login(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
-
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        access_token = create_access_token(user.id)
-        refresh_token = create_refresh_token(user.id)
-        return Response({'access_token': access_token, 'refresh_token': refresh_token})
-    else:
-        return Response({'error': 'Invalid credentials'})
-
-
-@api_view(['POST'])
 def signin(request):
     username = request.data.get('username')
     password = request.data.get('password')
@@ -34,24 +20,23 @@ def signin(request):
     else:
         return Response('Invalid credentials')
 
+
 @api_view(['POST'])
 def user_create(request):
-    serializer = UserSerializer
     first_name = request.data.get('first_name')
-    last_name = requset.data.get("last_name")
-    age = request.data.get('age')
+    last_name = request.data.get("last_name")
     phone = request.data.get('phone')
     username = request.data.get('username')
     password = request.data.get('password')
-    usercreate = User.objects.create(
-        'first_name'==first_name,
-        'last_name'==last_name,
-        'age'==age,
-        'phone'==phone,
-        'username'==username,
-        'password'==password
+    user = User.objects.create_user(
+        first_name=first_name,
+        last_name=last_name,
+        phone=phone,
+        username=username,
+        password=password
     )
+    token = Token.objects.get_or_create(user=user)
     print(request)
-    return Response(serializer, status=200)
+    return Response({'ok': True, 'token': token[0].key}, status=200)
 
 

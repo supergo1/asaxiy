@@ -1,9 +1,17 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
+def phone_validator(value):
+    if value.startswith('+998') and len(value) == 13:
+        return True
+    else:
+        raise ValidationError('Telefon nomer +998 bilan boshlanishi kerak va 13ta shrit bolishi kerak')
+
+
 class User(AbstractUser):
-    phone = models.CharField(max_length=13)
+    phone = models.CharField(max_length=13, validators=[phone_validator])
     avatar = models.ImageField(upload_to='avatar/')
 
     def __str__(self):
