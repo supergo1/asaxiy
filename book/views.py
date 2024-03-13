@@ -4,7 +4,7 @@ from .models import *
 from account.permissions import IsAdmin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from account.jwt_auth import JWTAuthentication
+# from account.jwt_auth import JWTAuthentication
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from .serializers import BookSerializer, BookDetailSerializer, FavoriteAuthorPostSerializer, FavoriteAuthorSerializer, \
     FeedbackSerializer
@@ -37,7 +37,7 @@ def book_detail(request, book_id):
 
 @api_view(['POST'])
 @permission_classes([IsAdmin])
-@authentication_classes([JWTAuthentication])
+# @authentication_classes([JWTAuthentication])
 def books_create(request):
     data = request.data
     book = Book.objects.create(
@@ -53,14 +53,14 @@ def books_create(request):
 
 @api_view(['DELETE'])
 @permission_classes([IsAdmin])
-@authentication_classes([JWTAuthentication])
+# @authentication_classes([JWTAuthentication])
 def delete_book(request, book_id):
     Book.objects.filter(pk=book_id).delete()
     return Response({"message": "Kitob o'chirildi"})
 
 
 @api_view(['POST'])
-@authentication_classes([JWTAuthentication])
+# @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def add_author_to_favorite(request):
     author_id = request.POST.get('author_id')
@@ -76,7 +76,7 @@ def add_author_to_favorite(request):
 
 class AddAuthorToFavorite(CreateAPIView):
     permission_classes = (IsAuthenticated,)
-    authentication_classes = (JWTAuthentication,)
+    # authentication_classes = (JWTAuthentication,)
     serializer_class = FavoriteAuthorPostSerializer
 
     def create(self, request, *args, **kwargs):
@@ -92,7 +92,7 @@ class AddAuthorToFavorite(CreateAPIView):
     
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
+# @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def get_favorite_authors(request):
     favs = FavoriteAuthor.objects.filter(user=request.user).first()

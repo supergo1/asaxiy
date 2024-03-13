@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from rest_framework.decorators import  api_view
 from rest_framework.response import Response
+from rest_framework.generics import CreateAPIView
+from .serializers import *
 from django.contrib.auth import  authenticate
-from .jwt_auth import create_access_token, decode_access_token, create_refresh_token, decode_refresh_token
+# from .jwt_auth import create_access_token, decode_access_token, create_refresh_token, decode_refresh_token
 from rest_framework.authtoken.models import Token
+from .models import *
 
 
 @api_view(['POST'])
@@ -31,8 +34,24 @@ def signin(request):
     else:
         return Response('Invalid credentials')
 
-
-
-
+@api_view(['POST'])
+def user_create(request):
+    serializer = UserSerializer
+    first_name = request.data.get('first_name')
+    last_name = requset.data.get("last_name")
+    age = request.data.get('age')
+    phone = request.data.get('phone')
+    username = request.data.get('username')
+    password = request.data.get('password')
+    usercreate = User.objects.create(
+        'first_name'==first_name,
+        'last_name'==last_name,
+        'age'==age,
+        'phone'==phone,
+        'username'==username,
+        'password'==password
+    )
+    print(request)
+    return Response(serializer, status=200)
 
 
